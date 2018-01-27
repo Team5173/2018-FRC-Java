@@ -1,11 +1,13 @@
 package org.usfirst.frc.team5173.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  * This is a 
@@ -16,16 +18,30 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	RobotDrive myRobot = new RobotDrive(0, 1);
-	XboxController controller = new XboxController(0);
-	Timer timer = new Timer();
 
+	RobotDrive Robot = new RobotDrive(1, 2);
+	
+	XboxController controller = new XboxController(0);
+	
+	Timer timer = new Timer();
+	
+	DoubleSolenoid Claw = new DoubleSolenoid(1,2);
+	
+	Compressor c = new Compressor(1);
+	
+	{
+		
+	c.start();
+	
+	}
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+		
 	}
 
 	/**
@@ -33,8 +49,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		
 		timer.reset();
+		
 		timer.start();
+		
 	}
 
 	/**
@@ -42,11 +61,61 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		
 		// Drive for 2 seconds
 		if (timer.get() < 2.0) {
-			myRobot.drive(-0.5, 0.0); // drive forwards half speed
+			
+			Robot.drive(-0.5, 0.0); // drive forwards half speed
+			
 		} else {
-			myRobot.drive(0.0, 0.0); // stop robot
+			
+			Robot.drive(0.0, 0.0); // stop robot
+			
+		}
+		//restarts timer
+		timer.reset();
+		
+		timer.start();
+		
+		// turn one direction for 2 seconds
+		if (timer.get()< 2.0) {
+			
+			Robot.drive(0.0, -0.5);
+			
+		} else { 
+			
+			Robot.drive(0, 0);//stop
+			
+		}
+		// Restart Timer
+		timer.reset();
+		
+		timer.start();
+		
+		// turn opposite direction for 2 seconds
+		if (timer.get() < 2.0) {
+			
+			Robot.drive(0.0, 0.5);
+			
+		} else {
+			
+			Robot.drive(0.0, 0.0);// stop
+			
+		} 
+		//Restart Timer
+		timer.reset();
+		
+		timer.start();
+		
+		//drives backward for 2 seconds
+		if (timer.get() < 2.0) {
+			
+			Robot.drive(0.5, 0.0);
+			
+		} else {
+			
+			Robot.drive(0.0, 0.0);//stop
+			
 		}
 	}
 
@@ -56,22 +125,28 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopInit() {
+		
 	}
 	Relay exampleRelay = new Relay(1);
+	
 	/**
 	 * This function is called periodically during operator control
 	 */
 	@Override
 	public void teleopPeriodic() {
-		myRobot.arcadeDrive(controller);
-		if (controller.getAButton() == true) {
-			exampleRelay.set(Relay.Value.kOn);
-			exampleRelay.set(Relay.Value.kForward);
+		
+		Robot.arcadeDrive(controller);
+		if(controller.getBButton() == true) {
+		Claw.set(DoubleSolenoid.Value.kForward);
 		}
-		else {
-			exampleRelay.set(Relay.Value.kOff);
-			exampleRelay.set(Relay.Value.kReverse);	
+		if(controller.getAButton() == true) {
+		Claw.set(DoubleSolenoid.Value.kReverse);
 		}
+	    
+	    c.setClosedLoopControl(true);
+	    
+	    c.setClosedLoopControl(false);
+	    
 	}
 
 	/**
@@ -79,6 +154,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
 		LiveWindow.run();
+		
 	}
 }
