@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5173.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -8,7 +9,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 /**
  * This is a 
  * The VM is configured to automatically run this class, and to call the
@@ -20,6 +22,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 public class Robot extends IterativeRobot {
 
 	RobotDrive Robot = new RobotDrive(1, 2);
+	
+	Spark Sparky = new Spark(0);
 	
 	XboxController controller = new XboxController(0);
 	
@@ -135,17 +139,37 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		Robot.arcadeDrive(controller);
+		//Robot.arcadeDrive(controller);
+		
+		//Robot.arcadeDrive(controller.getY(Hand.kLeft), controller.getX(Hand.kLeft));
+		
+		//Robot.arcadeDrive(controller.getRawAxis(1), controller.getRawAxis(0));
+		
+		double rawY = controller.getRawAxis(1);
+		rawY = Math.pow(rawY, 3);
+		double rawX = controller.getRawAxis(0);
+		rawX = Math.pow(rawX, 3);
+		Robot.arcadeDrive(rawY, rawX);
+		
 		if(controller.getBButton() == true) {
 		Claw.set(DoubleSolenoid.Value.kForward);
 		}
 		if(controller.getAButton() == true) {
 		Claw.set(DoubleSolenoid.Value.kReverse);
 		}
-	    
+		double rawTrigger = controller.getRawAxis(3);
+		if(rawTrigger > .05) {
+			Sparky.set(Math.pow(rawTrigger, 3));
+		} else {
+			double lawTrigger = controller.getRawAxis(3);
+			if (lawTrigger < .05) {
+				Sparky.set(Math.pow(lawTrigger, 3));
+			} else {
+				Robot.drive(0.0,0.0);
+			}
+		}
 	    c.setClosedLoopControl(true);
 	    
-	    c.setClosedLoopControl(false);
 	    
 	}
 
