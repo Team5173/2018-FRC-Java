@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;;
 /**
  * This is a 
  * The VM is configured to automatically run this class, and to call the
@@ -71,41 +70,61 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		//double distance = encoder.getDistance();
+		double distance = encoder.getDistance();
 		// Drive for 2 seconds
-		timer.start();
-		
-		if (timer.get() < 2.0){			
-			Robot.drive(-0.2, 0.0); // drive forwards half speed			
-		} else {			
-			Robot.drive(0.0, 0.0); // stop robot			
+		if (encoder.getDistance() < 2.0) {
+			
+			Robot.drive(-0.5, 0.0); // drive forwards half speed
+			
+		} else {
+			
+			Robot.drive(0.0, 0.0); // stop robot
+			
 		}
 		//restarts timer
-		timer.reset();		
-		timer.start();		
+		timer.reset();
+		
+		timer.start();
+		
 		// turn one direction for 2 seconds
-		if (timer.get()< 2.0) {			
-			Robot.drive(0.0, -0.2);			
-		} else { 			
-			Robot.drive(0, 0);//stop			
+		if (timer.get()< 2.0) {
+			
+			Robot.drive(0.0, -0.5);
+			
+		} else { 
+			
+			Robot.drive(0, 0);//stop
+			
 		}
 		// Restart Timer
-		timer.reset();		
-		timer.start();		
+		timer.reset();
+		
+		timer.start();
+		
 		// turn opposite direction for 2 seconds
-		if (timer.get() < 2.0) {			
-			Robot.drive(0.0, 0.2);			
-		} else {			
-			Robot.drive(0.0, 0.0);// stop			
+		if (timer.get() < 2.0) {
+			
+			Robot.drive(0.0, 0.5);
+			
+		} else {
+			
+			Robot.drive(0.0, 0.0);// stop
+			
 		} 
 		//Restart Timer
-		timer.reset();		
-		timer.start();		
+		timer.reset();
+		
+		timer.start();
+		
 		//drives backward for 2 seconds
-		if (timer.get() < 2.0) {			
-			Robot.drive(0.2, 0.0);			
-		} else {			
-			Robot.drive(0.0, 0.0);//stop			
+		if (timer.get() < 2.0) {
+			
+			Robot.drive(0.5, 0.0);
+			
+		} else {
+			
+			Robot.drive(0.0, 0.0);//stop
+			
 		}
 	}
 
@@ -129,7 +148,7 @@ public class Robot extends IterativeRobot {
 		//Robot.arcadeDrive(controller.getY(Hand.kLeft), controller.getX(Hand.kLeft));
 		
 		//Robot.arcadeDrive(controller.getRawAxis(1), controller.getRawAxis(0));
-		//double distance = encoder.getDistance();
+		double distance = encoder.getDistance();
 		double rawY = controller.getRawAxis(1);
 		rawY = Math.pow(rawY, 3);
 		double rawX = controller.getRawAxis(0);
@@ -171,18 +190,14 @@ public class Robot extends IterativeRobot {
 		} else {
 			if(controller.getTriggerAxis(Hand.kRight) > .7){ Voltage_Lift.set(-0.5);		
 				} else { Voltage_Lift.set(0.0);}
-		}
+		} 
 	
 	    c.setClosedLoopControl(true);
 	}
-
-	/**
-	 * This function is called periodically during test mode
-	 */
 	@Override
 	public void testPeriodic() {
 		
 		LiveWindow.run();
-		SmartDashboard.putNumber("encoder Distance",encoder.getDistance());
+		//SmartDashboard.putNumber("encoder Distance", Encoder.getDistnace);
 	}
 }
