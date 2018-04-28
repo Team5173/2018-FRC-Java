@@ -1,4 +1,5 @@
 package org.usfirst.frc.team5173.robot;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Encoder;
@@ -10,14 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-/**
- * This is a 
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
- */
+
 public class Robot extends IterativeRobot {
 
 	RobotDrive Robot = new RobotDrive(1, 2);
@@ -40,12 +34,7 @@ public class Robot extends IterativeRobot {
 	c.start();
 	
 	}
-	
-	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
-	 */
-	@Override
+
 	public void robotInit() {
 
 		encoder.setMaxPeriod(.1);
@@ -53,10 +42,6 @@ public class Robot extends IterativeRobot {
 		encoder.setDistancePerPulse(1/1024 * 1.625 * Math.PI/35);
 	}
 
-	/**
-	 * This function is run once each time the robot enters autonomous mode
-	 */
-	@Override
 	public void autonomousInit() {
 		
 		timer.reset();
@@ -65,10 +50,6 @@ public class Robot extends IterativeRobot {
 		
 	}
 
-	/**
-	 * This function is called periodically during autonomous
-	 */
-	@Override
 	public void autonomousPeriodic() {
 		double distance = encoder.getDistance();
 		// Drive for 2 seconds
@@ -128,19 +109,10 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
-	/**
-	 * This function is called once each time the robot enters tele-operated
-	 * mode
-	 */
-	@Override
 	public void teleopInit() {
 	}
 	Relay exampleRelay = new Relay(1);
-	
-	/**
-	 * This function is called periodically during operator control
-	 */
-	@Override
+
 	public void teleopPeriodic() {
 		
 		//Robot.arcadeDrive(controller);
@@ -194,7 +166,7 @@ public class Robot extends IterativeRobot {
 	
 	    c.setClosedLoopControl(true);
 	}
-	@Override
+
 	public void testPeriodic() {
 		
 		LiveWindow.run();
